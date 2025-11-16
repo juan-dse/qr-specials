@@ -1,98 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 
 function PublicMenu() {
+  // Por ahora solo usamos el slug para el futuro
   const { slug } = useParams();
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [restaurant, setRestaurant] = useState(null);
-  const [special, setSpecial] = useState(null);
-  const [date, setDate] = useState(null);
+  // DATOS DE DEMO (puedes cambiarlos cuando quieras)
+  const restaurant = {
+    name: "Taquería El Güero",
+    address: "123 Main St, Los Ángeles, CA",
+    phone: "(555) 123-4567",
+    primary_color: "#e65100",
+    logo_url: ""
+  };
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        setError(null);
+  const special = {
+    name: "Especial de Tacos 3×2",
+    price: 9.99,
+    currency: "USD",
+    description:
+      "3 tacos al gusto y 1 refresco incluido. Solo hoy, mostrando este código.",
+    image_url: ""
+  };
 
-        const res = await fetch(
-          `/.netlify/functions/public-menu?slug=${encodeURIComponent(slug)}`
-        );
+  const date = new Date();
 
-        if (!res.ok) {
-          throw new Error("SERVER_ERROR");
-        }
-
-        const data = await res.json();
-
-        if (!data.ok) {
-          setError(data.error || "RESTAURANT_NOT_FOUND");
-          setLoading(false);
-          return;
-        }
-
-        setRestaurant(data.restaurant || null);
-        setSpecial(data.special_today || null);
-        setDate(data.date || null);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        setError("NETWORK_ERROR");
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, [slug]);
-
-  const primaryColor = restaurant?.primary_color || "#222";
-
-  if (loading) {
-    return (
-      <BaseLayout>
-        <Card>
-          <p style={styles.loadingText}>Cargando especial del día...</p>
-        </Card>
-      </BaseLayout>
-    );
-  }
-
-  if (error === "RESTAURANT_NOT_FOUND") {
-    return (
-      <BaseLayout>
-        <Card>
-          <h1 style={styles.title}>Código no válido</h1>
-          <p style={styles.text}>
-            Este código ya no está activo. Pregunta en el restaurante por sus
-            especiales actuales.
-          </p>
-        </Card>
-      </BaseLayout>
-    );
-  }
-
-  if (error === "NETWORK_ERROR") {
-    return (
-      <BaseLayout>
-        <Card>
-          <h1 style={styles.title}>Ups, algo salió mal</h1>
-          <p style={styles.text}>
-            No pudimos cargar la información. Verifica tu conexión e intenta de
-            nuevo.
-          </p>
-        </Card>
-      </BaseLayout>
-    );
-  }
-
-  const hasSpecial = !!special;
+  const primaryColor = restaurant.primary_color || "#222";
 
   return (
     <BaseLayout>
       <Card>
         <header style={styles.header}>
-          {restaurant?.logo_url && (
+          {restaurant.logo_url && (
             <img
               src={restaurant.logo_url}
               alt={restaurant.name}
@@ -101,88 +40,58 @@ function PublicMenu() {
           )}
           <div>
             <h1 style={{ ...styles.title, color: primaryColor }}>
-              {restaurant?.name || "Restaurante"}
+              {restaurant.name}
             </h1>
-            {date && (
-              <p style={styles.subTitle}>
-                Especial del día •{" "}
-                {new Date(date).toLocaleDateString("es-MX", {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "short"
-                })}
-              </p>
-            )}
+            <p style={styles.subTitle}>
+              Especial del día •{" "}
+              {date.toLocaleDateString("es-MX", {
+                weekday: "long",
+                day: "numeric",
+                month: "short"
+              })}
+            </p>
+            <p style={{ ...styles.subTitle, marginTop: 4 }}>
+              Código: {slug}
+            </p>
           </div>
         </header>
 
-        {hasSpecial ? (
-          <section style={styles.specialSection}>
-            {special.image_url && (
-              <img
-                src={special.image_url}
-                alt={special.name}
-                style={styles.specialImage}
-              />
+        <section style={styles.specialSection}>
+          {special.image_url && (
+            <img
+              src={special.image_url}
+              alt={special.name}
+              style={styles.specialImage}
+            />
+          )}
+
+          <h2 style={styles.specialTitle}>{special.name}</h2>
+
+          <p style={styles.specialPrice}>
+            {special.currency === "USD" ? "$" : ""}
+            {special.price.toFixed(2)}
+          </p>
+
+          <p style={styles.specialDescription}>{special.description}</p>
+
+          <div style={styles.infoBox}>
+            {restaurant.address && (
+              <p style={styles.infoLine}>{restaurant.address}</p>
             )}
-
-            <h2 style={styles.specialTitle}>{special.name}</h2>
-
-            {special.price != null && (
-              <p style={styles.specialPrice}>
-                {special.currency === "USD" ? "$" : ""}
-                {Number(special.price).toFixed(2)}
+            {restaurant.phone && (
+              <p style={styles.infoLine}>
+                Tel:{" "}
+                <a href={`tel:${restaurant.phone}`} style={styles.link}>
+                  {restaurant.phone}
+                </a>
               </p>
             )}
+          </div>
 
-            {special.description && (
-              <p style={styles.specialDescription}>{special.description}</p>
-            )}
-
-            {(restaurant?.address || restaurant?.phone) && (
-              <div style={styles.infoBox}>
-                {restaurant.address && (
-                  <p style={styles.infoLine}>{restaurant.address}</p>
-                )}
-                {restaurant.phone && (
-                  <p style={styles.infoLine}>
-                    Tel:{" "}
-                    <a href={`tel:${restaurant.phone}`} style={styles.link}>
-                      {restaurant.phone}
-                    </a>
-                  </p>
-                )}
-              </div>
-            )}
-
-            <p style={styles.footerNote}>
-              Muestra esta pantalla en caja para más detalles.
-            </p>
-          </section>
-        ) : (
-          <section style={styles.specialSection}>
-            <h2 style={styles.specialTitle}>Sin especial configurado hoy</h2>
-            <p style={styles.specialDescription}>
-              Este restaurante aún no ha configurado su especial del día.
-              Pregunta en caja por las promociones disponibles.
-            </p>
-            {(restaurant?.address || restaurant?.phone) && (
-              <div style={styles.infoBox}>
-                {restaurant.address && (
-                  <p style={styles.infoLine}>{restaurant.address}</p>
-                )}
-                {restaurant.phone && (
-                  <p style={styles.infoLine}>
-                    Tel:{" "}
-                    <a href={`tel:${restaurant.phone}`} style={styles.link}>
-                      {restaurant.phone}
-                    </a>
-                  </p>
-                )}
-              </div>
-            )}
-          </section>
-        )}
+          <p style={styles.footerNote}>
+            Muestra esta pantalla en caja para recibir la promoción.
+          </p>
+        </section>
       </Card>
     </BaseLayout>
   );
@@ -238,21 +147,8 @@ const styles = {
     color: "#777",
     textTransform: "capitalize"
   },
-  loadingText: {
-    textAlign: "center",
-    fontSize: "16px",
-    color: "#555",
-    margin: 0
-  },
   specialSection: {
     textAlign: "center"
-  },
-  specialImage: {
-    width: "100%",
-    maxHeight: "260px",
-    objectFit: "cover",
-    borderRadius: "14px",
-    marginBottom: "16px"
   },
   specialTitle: {
     fontSize: "22px",
@@ -291,6 +187,12 @@ const styles = {
     marginTop: "14px",
     fontSize: "13px",
     color: "#888"
+  },
+  loadingText: {
+    textAlign: "center",
+    fontSize: "16px",
+    color: "#555",
+    margin: 0
   }
 };
 
