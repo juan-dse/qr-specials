@@ -1,49 +1,83 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-function PublicMenu() {
-  // Por ahora solo usamos el slug para el futuro
-  const { slug } = useParams();
-
-  // DATOS DE DEMO (puedes cambiarlos cuando quieras)
-  const restaurant = {
+// 🎯 Catálogo de restaurantes y sus especiales
+const RESTAURANTS = {
+  "taqueria-el-guero": {
     name: "Taquería El Güero",
     address: "123 Main St, Los Ángeles, CA",
     phone: "(555) 123-4567",
     primary_color: "#e65100",
-    logo_url: ""
-  };
+    special: {
+      name: "Especial de Tacos 3×2",
+      price: 9.99,
+      currency: "USD",
+      description:
+        "3 tacos al gusto y 1 refresco incluido. Solo hoy, mostrando este código."
+    }
+  },
+  "tacos-la-esquina": {
+    name: "Tacos La Esquina",
+    address: "456 Elm St, Los Ángeles, CA",
+    phone: "(555) 555-9876",
+    primary_color: "#2e7d32",
+    special: {
+      name: "Quesabirria + Consomé",
+      price: 11.5,
+      currency: "USD",
+      description:
+        "Orden de quesabirria con consomé y cebolla/cilantro. Promoción válida solo en mostrador."
+    }
+  },
+  "mariscos-don-paco": {
+    name: "Mariscos Don Paco",
+    address: "789 Ocean Ave, Los Ángeles, CA",
+    phone: "(555) 888-2222",
+    primary_color: "#0277bd",
+    special: {
+      name: "Coctel de Camarón + Agua Fresca",
+      price: 13.99,
+      currency: "USD",
+      description:
+        "Coctel chico de camarón y agua fresca a elegir. Disponible solo al mostrar este código."
+    }
+  }
+};
 
-  const special = {
-    name: "Especial de Tacos 3×2",
-    price: 9.99,
-    currency: "USD",
-    description:
-      "3 tacos al gusto y 1 refresco incluido. Solo hoy, mostrando este código.",
-    image_url: ""
-  };
+function PublicMenu() {
+  const { slug } = useParams();
+  const config = RESTAURANTS[slug];
 
+  // Si el slug no existe en el catálogo
+  if (!config) {
+    return (
+      <BaseLayout>
+        <Card>
+          <h1 style={styles.title}>Código no válido</h1>
+          <p style={styles.specialDescription}>
+            Este código ya no está activo o fue escrito incorrectamente.
+          </p>
+          <p style={styles.specialDescription}>
+            Pide en el negocio un QR actualizado o revisa la dirección del
+            enlace.
+          </p>
+        </Card>
+      </BaseLayout>
+    );
+  }
+
+  const { name, address, phone, primary_color, special } = config;
   const date = new Date();
-
-  const primaryColor = restaurant.primary_color || "#222";
+  const primaryColor = primary_color || "#222";
 
   return (
     <BaseLayout>
       <Card>
         <header style={styles.header}>
-          {restaurant.logo_url && (
-            <img
-              src={restaurant.logo_url}
-              alt={restaurant.name}
-              style={styles.logo}
-            />
-          )}
           <div>
-            <h1 style={{ ...styles.title, color: primaryColor }}>
-              {restaurant.name}
-            </h1>
+            <h1 style={{ ...styles.title, color: primaryColor }}>{name}</h1>
             <p style={styles.subTitle}>
-              Especial del día •{" "}
+              Especial Del Día •{" "}
               {date.toLocaleDateString("es-MX", {
                 weekday: "long",
                 day: "numeric",
@@ -51,20 +85,12 @@ function PublicMenu() {
               })}
             </p>
             <p style={{ ...styles.subTitle, marginTop: 4 }}>
-              Código: {slug}
+              Código: {slug.replace(/-/g, "-")}
             </p>
           </div>
         </header>
 
         <section style={styles.specialSection}>
-          {special.image_url && (
-            <img
-              src={special.image_url}
-              alt={special.name}
-              style={styles.specialImage}
-            />
-          )}
-
           <h2 style={styles.specialTitle}>{special.name}</h2>
 
           <p style={styles.specialPrice}>
@@ -75,14 +101,12 @@ function PublicMenu() {
           <p style={styles.specialDescription}>{special.description}</p>
 
           <div style={styles.infoBox}>
-            {restaurant.address && (
-              <p style={styles.infoLine}>{restaurant.address}</p>
-            )}
-            {restaurant.phone && (
+            {address && <p style={styles.infoLine}>{address}</p>}
+            {phone && (
               <p style={styles.infoLine}>
                 Tel:{" "}
-                <a href={`tel:${restaurant.phone}`} style={styles.link}>
-                  {restaurant.phone}
+                <a href={`tel:${phone}`} style={styles.link}>
+                  {phone}
                 </a>
               </p>
             )}
@@ -121,20 +145,13 @@ const styles = {
     backgroundColor: "#ffffff",
     borderRadius: "16px",
     padding: "20px",
-    boxShadow: "0 8px 24px rgba(0,0,0,0.08)"
+    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)"
   },
   header: {
     display: "flex",
     alignItems: "center",
     gap: "16px",
     marginBottom: "20px"
-  },
-  logo: {
-    width: "56px",
-    height: "56px",
-    objectFit: "contain",
-    borderRadius: "12px",
-    border: "1px solid #eee"
   },
   title: {
     fontSize: "20px",
@@ -187,12 +204,6 @@ const styles = {
     marginTop: "14px",
     fontSize: "13px",
     color: "#888"
-  },
-  loadingText: {
-    textAlign: "center",
-    fontSize: "16px",
-    color: "#555",
-    margin: 0
   }
 };
 
