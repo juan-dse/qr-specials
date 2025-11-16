@@ -1,45 +1,45 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-// 🎯 Catálogo de restaurantes y sus especiales
+// 🎯 Catálogo de TUS 3 CLIENTES
 const RESTAURANTS = {
-  "taqueria-el-guero": {
-    name: "Taquería El Güero",
-    address: "123 Main St, Los Ángeles, CA",
-    phone: "(555) 123-4567",
+  "el-perico-market": {
+    name: "El Perico Market",
+    address: "10524 Garvey Ave, El Monte, CA",
+    phone: "626-350-0686",
     primary_color: "#e65100",
     special: {
-      name: "Especial de Tacos 3×2",
-      price: 9.99,
+      name: "Combo Desayuno Ranchero",
+      price: 8.99,
       currency: "USD",
       description:
-        "3 tacos al gusto y 1 refresco incluido. Solo hoy, mostrando este código."
+        "Huevos al gusto, frijoles, arroz y café de refill. Solo hoy mostrando este código."
     }
   },
-  "tacos-la-esquina": {
-    name: "Tacos La Esquina",
-    address: "456 Elm St, Los Ángeles, CA",
-    phone: "(555) 555-9876",
+  "paloma-meat-market": {
+    name: "Paloma Meat Market",
+    address: "6531 Rita Ave, Huntington Park, CA 90255",
+    phone: "(323) 312-0135",
     primary_color: "#2e7d32",
     special: {
-      name: "Quesabirria + Consomé",
-      price: 11.5,
+      name: "Especial Carne Asada Familiar",
+      price: 16.99,
       currency: "USD",
       description:
-        "Orden de quesabirria con consomé y cebolla/cilantro. Promoción válida solo en mostrador."
+        "1 lb de carne asada marinada + tortillas + salsa de la casa. Promoción válida solo en tienda."
     }
   },
-  "mariscos-don-paco": {
-    name: "Mariscos Don Paco",
-    address: "789 Ocean Ave, Los Ángeles, CA",
-    phone: "(555) 888-2222",
+  "mi-mercadito": {
+    name: "Mi Mercadito",
+    address: "10500 S Prairie Ave, Inglewood, CA 90303",
+    phone: "(310) 419-8127",
     primary_color: "#0277bd",
     special: {
-      name: "Coctel de Camarón + Agua Fresca",
-      price: 13.99,
+      name: "Paquete Finde: Tacos y Refrescos",
+      price: 12.5,
       currency: "USD",
       description:
-        "Coctel chico de camarón y agua fresca a elegir. Disponible solo al mostrar este código."
+        "6 tacos surtidos + 2 refrescos en lata. Disponible presentando esta pantalla en caja."
     }
   }
 };
@@ -85,7 +85,7 @@ function PublicMenu() {
               })}
             </p>
             <p style={{ ...styles.subTitle, marginTop: 4 }}>
-              Código: {slug.replace(/-/g, "-")}
+              Código: {slug}
             </p>
           </div>
         </header>
