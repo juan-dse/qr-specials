@@ -1,5 +1,5 @@
 // src/PublicMenu.jsx
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 
 // Colores base (solo 3 colores fuertes)
@@ -14,13 +14,12 @@ const RESTAURANTS = {
     address: "10524 Garvey Ave, El Monte, CA",
     phone: "626-350-0686",
     primaryColor: PRIMARY_COLOR,
-    logoUrl: "/logos/el-perico-logo.png", // asegúrate de tener este archivo en public/logos/
     special: {
       title: "Combo Desayuno Ranchero",
       price: 8.99,
       description:
         "Huevos al gusto, frijoles, arroz y café de refill. Solo hoy mostrando este código.",
-      validUntil: "2025-11-30",
+      validUntil: "2025-11-29",
     },
   },
 
@@ -29,7 +28,6 @@ const RESTAURANTS = {
     address: "6531 Rita Ave, Huntington Park, CA 90255",
     phone: "(323) 312-0135",
     primaryColor: PRIMARY_COLOR,
-    // logoUrl: "/logos/paloma-logo.png",
     special: {
       title: "Especial Paloma",
       price: 7.99,
@@ -43,7 +41,6 @@ const RESTAURANTS = {
     address: "10500 S Prairie Ave, Inglewood, CA 90303",
     phone: "(310) 419-8127",
     primaryColor: PRIMARY_COLOR,
-    // logoUrl: "/logos/mi-mercadito-logo.png",
     special: {
       title: "Especial Mi Mercadito",
       price: 6.99,
@@ -56,13 +53,6 @@ const RESTAURANTS = {
 export default function PublicMenu() {
   const { slug } = useParams();
   const restaurant = RESTAURANTS[slug];
-
-  const [now, setNow] = useState(new Date());
-
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
 
   if (!restaurant) {
     return (
@@ -97,6 +87,7 @@ export default function PublicMenu() {
   }
 
   const special = restaurant.special || {};
+  const now = new Date();
   let isExpired = false;
 
   if (special.validUntil) {
@@ -130,161 +121,104 @@ export default function PublicMenu() {
           borderRadius: 24,
           padding: 20,
           boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-          position: "relative",
         }}
       >
-        {/* Reloj pequeño arriba a la derecha */}
-        <div
-          style={{
-            position: "absolute",
-            top: 12,
-            right: 16,
-            fontSize: "0.8rem",
-            color: "#666",
-            textAlign: "right",
-          }}
-        >
-          <div>
-            🕒{" "}
-            {now.toLocaleTimeString("es-MX", {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-            })}
-          </div>
-          <div>
-            {now.toLocaleDateString("es-MX", {
-              weekday: "short",
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })}
-          </div>
-        </div>
-
-        {/* ENCABEZADO */}
+        {/* ENCABEZADO CENTRADO */}
         <header
           style={{
             marginBottom: 16,
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            gap: 12,
+            textAlign: "center",
           }}
         >
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <h1
-              style={{
-                margin: 0,
-                fontSize: "1.8rem",
-                fontWeight: 800,
-                color: restaurant.primaryColor || PRIMARY_COLOR,
-              }}
+          {/* Nombre negocio */}
+          <h1
+            style={{
+              margin: 0,
+              fontSize: "1.8rem",
+              fontWeight: 800,
+              color: restaurant.primaryColor || PRIMARY_COLOR,
+            }}
+          >
+            {restaurant.name}
+          </h1>
+
+          {/* Dirección centrada */}
+          <p
+            style={{
+              margin: "4px 0 0 0",
+              fontSize: "0.9rem",
+              color: "#555",
+            }}
+          >
+            <a
+              href={mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: LINK_COLOR, textDecoration: "none" }}
             >
-              {restaurant.name}
-            </h1>
+              {restaurant.address}
+            </a>
+          </p>
 
-            <p
-              style={{
-                margin: "4px 0 0 0",
-                fontSize: "0.9rem",
-                color: "#555",
-              }}
+          {/* Teléfono centrado con “Llámanos:” */}
+          <p
+            style={{
+              margin: "2px 0 8px 0",
+              fontSize: "0.9rem",
+              color: "#555",
+            }}
+          >
+            Llámanos:{" "}
+            <a
+              href={`tel:${cleanPhone}`}
+              style={{ color: LINK_COLOR, textDecoration: "none" }}
             >
-              <a
-                href={mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: LINK_COLOR, textDecoration: "none" }}
-              >
-                {restaurant.address}
-              </a>
-            </p>
+              {restaurant.phone}
+            </a>
+          </p>
 
-            <p
-              style={{
-                margin: "2px 0 8px 0",
-                fontSize: "0.9rem",
-                color: "#555",
-              }}
-            >
-              Tel:{" "}
-              <a
-                href={`tel:${cleanPhone}`}
-                style={{ color: LINK_COLOR, textDecoration: "none" }}
-              >
-                {restaurant.phone}
-              </a>
-            </p>
+          {/* Línea divisoria semitransparente */}
+          <div
+            style={{
+              height: 1,
+              width: "100%",
+              margin: "4px 0 8px",
+              background: "rgba(0,0,0,0.06)",
+            }}
+          />
 
-            {!isExpired && special.validUntil && (
-              <p
-                style={{
-                  margin: "2px 0 0 0",
-                  fontSize: "0.9rem",
-                  color: "#666",
-                }}
-              >
-                Especial del día • Válido hasta:{" "}
-                <strong>
-                  {new Date(special.validUntil).toLocaleDateString("es-MX", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </strong>
-              </p>
-            )}
-
+          {/* Vigencia del especial */}
+          {!isExpired && special.validUntil && (
             <p
               style={{
                 margin: "2px 0 0 0",
-                fontSize: "0.85rem",
-                color: "#777",
+                fontSize: "0.9rem",
+                color: "#666",
               }}
             >
-              Código de promoción: <strong>El-Perico-Market</strong>
+              Especial del día • Válido hasta:{" "}
+              <strong>
+                {new Date(special.validUntil).toLocaleDateString("es-MX", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </strong>
             </p>
+          )}
 
-            {isExpired && (
-              <p
-                style={{
-                  marginTop: 8,
-                  fontSize: "0.9rem",
-                  color: "#C62828",
-                  fontWeight: 600,
-                }}
-              >
-                Promoción expirada
-              </p>
-            )}
-          </div>
-
-          {restaurant.logoUrl && (
-            <div
+          {/* Mensaje si está expirada */}
+          {isExpired && (
+            <p
               style={{
-                flexShrink: 0,
-                width: 40,
-                height: 40,
-                borderRadius: 10,
-                overflow: "hidden",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "#F1F1F5",
+                marginTop: 8,
+                fontSize: "0.9rem",
+                color: "#C62828",
+                fontWeight: 600,
               }}
             >
-              <img
-                src={restaurant.logoUrl}
-                alt={`Logo de ${restaurant.name}`}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                  display: "block",
-                }}
-              />
-            </div>
+              Promoción expirada
+            </p>
           )}
         </header>
 
@@ -356,10 +290,11 @@ export default function PublicMenu() {
             paddingTop: 12,
             fontSize: "0.9rem",
             color: "#555",
+            textAlign: "center",
           }}
         >
           <p style={{ margin: 0 }}>{restaurant.address}</p>
-          <p style={{ margin: "2px 0 6px" }}>Tel: {restaurant.phone}</p>
+          <p style={{ margin: "2px 0 6px" }}>Llámanos: {restaurant.phone}</p>
           <p
             style={{
               margin: 0,
