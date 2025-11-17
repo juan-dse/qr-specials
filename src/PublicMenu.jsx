@@ -22,7 +22,7 @@ const RESTAURANTS = {
       price: 8.99,
       description:
         "Huevos al gusto, frijoles, arroz y café de refill. Solo hoy.",
-      validUntil: "2025-11-28",
+      validUntil: "2025-11-27",
     },
   },
 
@@ -117,10 +117,11 @@ export default function PublicMenu() {
       style={{
         minHeight: "100vh",
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "column",
+        justifyContent: "flex-start", // cupón más arriba, menos rojo arriba/abajo
         alignItems: "center",
         background: BG_RED,
-        padding: "4px 8px", // menos alto el rojo arriba/abajo
+        padding: "6px 8px 4px",
         fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
       }}
     >
@@ -133,6 +134,8 @@ export default function PublicMenu() {
           padding: 18,
           boxShadow: "0 10px 30px rgba(0,0,0,0.18)",
           border: "1px dashed rgba(0,0,0,0.25)",
+          marginTop: 4,
+          marginBottom: 4,
         }}
       >
         {/* ENCABEZADO CENTRADO */}
@@ -298,15 +301,21 @@ export default function PublicMenu() {
             textAlign: "center",
           }}
         >
-          {/* Teléfono en formato nuevo (una sola línea) */}
+          {/* Texto y teléfono en líneas separadas */}
           <p
             style={{
-              margin: "2px 0 4px",
-              whiteSpace: "nowrap", // forza una sola línea
+              margin: "2px 0 2px",
               fontSize: "0.9rem",
             }}
           >
-            Llámanos para tomar tu orden:{" "}
+            Llámanos para tomar tu orden:
+          </p>
+          <p
+            style={{
+              margin: "0 0 4px",
+              fontSize: "0.9rem",
+            }}
+          >
             <a
               href={`tel:${cleanPhone}`}
               style={{ color: LINK_BLUE, textDecoration: "none" }}
@@ -315,7 +324,7 @@ export default function PublicMenu() {
             </a>
           </p>
 
-          {/* Botón de menú (abre PDF) sin texto previo */}
+          {/* Botón de menú (abre PDF) */}
           {restaurant.menuUrl && (
             <div style={{ marginBottom: 6 }}>
               <a
@@ -367,6 +376,19 @@ export default function PublicMenu() {
             ofrecen rain checks.
           </p>
         </footer>
+      </div>
+
+      {/* Texto sobre el borde rojo inferior */}
+      <div
+        style={{
+          marginBottom: 4,
+          textAlign: "center",
+          color: "#FFFFFF",
+          fontSize: "0.68rem",
+          fontStyle: "italic",
+        }}
+      >
+        powered by especialesqr.com
       </div>
     </div>
   );
