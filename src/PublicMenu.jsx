@@ -3,9 +3,10 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 // Colores base (3 colores fuertes)
-const PRIMARY_COLOR = "#FF6A00"; // títulos / enlaces
+const PRIMARY_COLOR = "#FF6A00"; // títulos
 const PRICE_COLOR = "#2E7D32";   // precio
-const BG_YELLOW = "#FFEB3B";     // fondo brillante
+const BG_YELLOW = "#FFFF00";     // fondo brillante solicitado
+const LINK_BLUE = "#007AFF";     // azul para dirección / teléfono / menú
 
 // Datos de restaurantes demo
 const RESTAURANTS = {
@@ -14,6 +15,7 @@ const RESTAURANTS = {
     address: "10524 Garvey Ave, El Monte, CA",
     phone: "626-350-0686",
     primaryColor: PRIMARY_COLOR,
+    menuUrl: "https://especialesqr.com", // aquí puedes poner el menú real cuando lo tengas
     special: {
       title: "Combo Desayuno Ranchero",
       price: 8.99,
@@ -101,7 +103,6 @@ export default function PublicMenu() {
     `https://www.google.com/maps?q=${encodeURIComponent(restaurant.address)}`;
 
   const cleanPhone = restaurant.phone.replace(/[^\d+]/g, "");
-
   const formattedValidUntil = special.validUntil
     ? new Date(special.validUntil).toLocaleDateString("es-MX", {
         day: "2-digit",
@@ -130,7 +131,7 @@ export default function PublicMenu() {
           borderRadius: 24,
           padding: 20,
           boxShadow: "0 10px 30px rgba(0,0,0,0.18)",
-          border: "1px dashed rgba(0,0,0,0.25)", // borde tipo cupón
+          border: "1px dashed rgba(0,0,0,0.25)",
         }}
       >
         {/* ENCABEZADO CENTRADO */}
@@ -152,7 +153,7 @@ export default function PublicMenu() {
             {restaurant.name}
           </h1>
 
-          {/* Dirección centrada */}
+          {/* Dirección centrada (azul y clickeable) */}
           <p
             style={{
               margin: "4px 0 0 0",
@@ -164,13 +165,13 @@ export default function PublicMenu() {
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: PRIMARY_COLOR, textDecoration: "none" }}
+              style={{ color: LINK_BLUE, textDecoration: "none" }}
             >
               {restaurant.address}
             </a>
           </p>
 
-          {/* Teléfono centrado con “Llámanos:” */}
+          {/* Teléfono centrado con “Llámanos:” en azul y clickeable */}
           <p
             style={{
               margin: "2px 0 8px 0",
@@ -181,7 +182,7 @@ export default function PublicMenu() {
             Llámanos:{" "}
             <a
               href={`tel:${cleanPhone}`}
-              style={{ color: PRIMARY_COLOR, textDecoration: "none" }}
+              style={{ color: LINK_BLUE, textDecoration: "none" }}
             >
               {restaurant.phone}
             </a>
@@ -307,8 +308,31 @@ export default function PublicMenu() {
             textAlign: "center",
           }}
         >
-          {/* Dirección eliminada aquí para no repetir */}
-          <p style={{ margin: "2px 0 6px" }}>Llámanos: {restaurant.phone}</p>
+          {/* Teléfono en formato nuevo */}
+          <p style={{ margin: "2px 0 4px" }}>
+            Llámanos para tomar tu orden:{" "}
+            <a
+              href={`tel:${cleanPhone}`}
+              style={{ color: LINK_BLUE, textDecoration: "none" }}
+            >
+              {restaurant.phone}
+            </a>
+          </p>
+
+          {/* Link al menú (solo si hay menuUrl configurado) */}
+          {restaurant.menuUrl && (
+            <p style={{ margin: "0 0 8px" }}>
+              <a
+                href={restaurant.menuUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: LINK_BLUE, textDecoration: "underline" }}
+              >
+                Mira nuestro menú (presionando aquí)
+              </a>
+            </p>
+          )}
+
           <p
             style={{
               margin: 0,
