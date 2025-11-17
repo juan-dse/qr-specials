@@ -15,7 +15,6 @@ const RESTAURANTS = {
     address: "10524 Garvey Ave, El Monte, CA",
     phone: "626-350-0686",
     primaryColor: PRIMARY_COLOR,
-    // PDF del menú (archivo en /public/el-perico-menu.pdf)
     menuUrl: "/el-perico-menu.pdf",
     special: {
       title: "Combo Desayuno Ranchero",
@@ -118,10 +117,10 @@ export default function PublicMenu() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "flex-start", // empezamos desde arriba
+        justifyContent: "center", // otra vez centrado como antes
         alignItems: "center",
         background: BG_RED,
-        padding: "0.3in 8px", // ~0.3 pulgadas arriba y abajo
+        padding: "4px 8px",
         fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
       }}
     >
@@ -143,7 +142,6 @@ export default function PublicMenu() {
             textAlign: "center",
           }}
         >
-          {/* Nombre negocio */}
           <h1
             style={{
               margin: 0,
@@ -155,7 +153,6 @@ export default function PublicMenu() {
             {restaurant.name}
           </h1>
 
-          {/* Dirección centrada (azul y clickeable) */}
           <p
             style={{
               margin: "3px 0 0 0",
@@ -173,7 +170,6 @@ export default function PublicMenu() {
             </a>
           </p>
 
-          {/* Teléfono centrado con “Llámanos:” en azul y clickeable */}
           <p
             style={{
               margin: "2px 0 6px 0",
@@ -190,7 +186,6 @@ export default function PublicMenu() {
             </a>
           </p>
 
-          {/* Línea divisoria semitransparente */}
           <div
             style={{
               height: 1,
@@ -200,7 +195,6 @@ export default function PublicMenu() {
             }}
           />
 
-          {/* NUESTRAS ESPECIALES + fecha */}
           <p
             style={{
               margin: 0,
@@ -299,7 +293,6 @@ export default function PublicMenu() {
             textAlign: "center",
           }}
         >
-          {/* Texto y teléfono en líneas separadas */}
           <p
             style={{
               margin: "2px 0 2px",
@@ -322,7 +315,6 @@ export default function PublicMenu() {
             </a>
           </p>
 
-          {/* Botón de menú (abre PDF) */}
           {restaurant.menuUrl && (
             <div style={{ marginBottom: 6 }}>
               <a
@@ -346,7 +338,6 @@ export default function PublicMenu() {
             </div>
           )}
 
-          {/* Frase legal extra de precio válido */}
           <p
             style={{
               margin: "4px 0 1px",
@@ -376,7 +367,7 @@ export default function PublicMenu() {
         </footer>
       </div>
 
-      {/* Texto sobre el borde rojo inferior, alineado a la derecha */}
+      {/* powered by abajo, en el rojo */}
       <div
         style={{
           marginTop: 4,
@@ -385,7 +376,7 @@ export default function PublicMenu() {
           textAlign: "right",
           color: "#FFFFFF",
           fontSize: "0.68rem",
-          fontWeight: 700, // bold
+          fontWeight: 700,
         }}
       >
         powered by especialesqr.com
