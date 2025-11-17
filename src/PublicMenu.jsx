@@ -118,10 +118,10 @@ export default function PublicMenu() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center", // centrado vertical como antes
+        justifyContent: "flex-start", // empezamos desde arriba
         alignItems: "center",
         background: BG_RED,
-        padding: "4px 8px",
+        padding: "0.3in 8px", // ~0.3 pulgadas arriba y abajo
         fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
       }}
     >
