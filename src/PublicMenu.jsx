@@ -15,7 +15,7 @@ const RESTAURANTS = {
     address: "10524 Garvey Ave, El Monte, CA",
     phone: "626-350-0686",
     primaryColor: PRIMARY_COLOR,
-    // PDF del menú (coloca el archivo en /public/el-perico-menu.pdf)
+    // PDF del menú (archivo en /public/el-perico-menu.pdf)
     menuUrl: "/el-perico-menu.pdf",
     special: {
       title: "Combo Desayuno Ranchero",
@@ -120,13 +120,13 @@ export default function PublicMenu() {
         justifyContent: "center",
         alignItems: "center",
         background: BG_RED,
-        padding: 8, // menos rojo lateral
+        padding: "4px 8px", // menos alto el rojo arriba/abajo
         fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
       }}
     >
       <div
         style={{
-          maxWidth: 440, // un poco más angosta
+          maxWidth: 440,
           width: "100%",
           background: "#FFFFFF",
           borderRadius: 22,
@@ -240,7 +240,7 @@ export default function PublicMenu() {
 
         {/* CONTENIDO */}
         {!isExpired ? (
-          <main style={{ textAlign: "center", marginBottom: 12 }}>
+          <main style={{ textAlign: "center", marginBottom: 10 }}>
             <h2
               style={{
                 margin: 0,
@@ -275,7 +275,7 @@ export default function PublicMenu() {
             </p>
           </main>
         ) : (
-          <main style={{ marginBottom: 12, textAlign: "center" }}>
+          <main style={{ marginBottom: 10, textAlign: "center" }}>
             <p
               style={{
                 fontSize: "0.96rem",
@@ -298,8 +298,14 @@ export default function PublicMenu() {
             textAlign: "center",
           }}
         >
-          {/* Teléfono en formato nuevo */}
-          <p style={{ margin: "2px 0 4px" }}>
+          {/* Teléfono en formato nuevo (una sola línea) */}
+          <p
+            style={{
+              margin: "2px 0 4px",
+              whiteSpace: "nowrap", // forza una sola línea
+              fontSize: "0.9rem",
+            }}
+          >
             Llámanos para tomar tu orden:{" "}
             <a
               href={`tel:${cleanPhone}`}
@@ -309,10 +315,9 @@ export default function PublicMenu() {
             </a>
           </p>
 
-          {/* Bloque de menú con efecto de botón (abre PDF) */}
+          {/* Botón de menú (abre PDF) sin texto previo */}
           {restaurant.menuUrl && (
-            <div style={{ marginBottom: 8 }}>
-              <p style={{ margin: "2px 0 4px" }}>Mira nuestro menú</p>
+            <div style={{ marginBottom: 6 }}>
               <a
                 href={restaurant.menuUrl}
                 target="_blank"
@@ -329,7 +334,7 @@ export default function PublicMenu() {
                   boxShadow: "0 3px 6px rgba(0,0,0,0.2)",
                 }}
               >
-                Ver menú completo
+                Haz clic aquí para ver nuestro menú
               </a>
             </div>
           )}
@@ -338,7 +343,7 @@ export default function PublicMenu() {
           <p
             style={{
               margin: "4px 0 1px",
-              fontSize: "0.68rem", // más pequeño (~2pt menos)
+              fontSize: "0.68rem",
               color: "#999",
               fontStyle: "italic",
               lineHeight: 1.3,
@@ -350,7 +355,7 @@ export default function PublicMenu() {
           <p
             style={{
               margin: 0,
-              fontSize: "0.68rem", // más pequeño
+              fontSize: "0.68rem",
               color: "#999",
               fontStyle: "italic",
               lineHeight: 1.3,
