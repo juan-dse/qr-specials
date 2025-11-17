@@ -15,7 +15,8 @@ const RESTAURANTS = {
     address: "10524 Garvey Ave, El Monte, CA",
     phone: "626-350-0686",
     primaryColor: PRIMARY_COLOR,
-    menuUrl: "https://especialesqr.com", // aquí puedes poner el menú real cuando lo tengas
+    // PDF del menú (coloca el archivo en /public/el-perico-menu.pdf)
+    menuUrl: "/el-perico-menu.pdf",
     special: {
       title: "Combo Desayuno Ranchero",
       price: 8.99,
@@ -70,11 +71,11 @@ export default function PublicMenu() {
       >
         <div
           style={{
-            padding: 24,
+            padding: 20,
             borderRadius: 16,
             background: "#FFFFFF",
             boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-            maxWidth: 400,
+            maxWidth: 380,
             textAlign: "center",
             border: "1px dashed rgba(0,0,0,0.18)",
           }}
@@ -119,17 +120,17 @@ export default function PublicMenu() {
         justifyContent: "center",
         alignItems: "center",
         background: BG_RED,
-        padding: 12, // un poco menos rojo lateral
+        padding: 8, // menos rojo lateral
         fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
       }}
     >
       <div
         style={{
-          maxWidth: 460, // tarjeta un poco más angosta
+          maxWidth: 440, // un poco más angosta
           width: "100%",
           background: "#FFFFFF",
-          borderRadius: 24,
-          padding: 20,
+          borderRadius: 22,
+          padding: 18,
           boxShadow: "0 10px 30px rgba(0,0,0,0.18)",
           border: "1px dashed rgba(0,0,0,0.25)",
         }}
@@ -137,7 +138,7 @@ export default function PublicMenu() {
         {/* ENCABEZADO CENTRADO */}
         <header
           style={{
-            marginBottom: 16,
+            marginBottom: 12,
             textAlign: "center",
           }}
         >
@@ -145,7 +146,7 @@ export default function PublicMenu() {
           <h1
             style={{
               margin: 0,
-              fontSize: "1.7rem", // un punto menos grande
+              fontSize: "1.6rem",
               fontWeight: 800,
               color: restaurant.primaryColor || PRIMARY_COLOR,
             }}
@@ -156,7 +157,7 @@ export default function PublicMenu() {
           {/* Dirección centrada (azul y clickeable) */}
           <p
             style={{
-              margin: "4px 0 0 0",
+              margin: "3px 0 0 0",
               fontSize: "0.9rem",
               color: "#555",
             }}
@@ -174,7 +175,7 @@ export default function PublicMenu() {
           {/* Teléfono centrado con “Llámanos:” en azul y clickeable */}
           <p
             style={{
-              margin: "2px 0 8px 0",
+              margin: "2px 0 6px 0",
               fontSize: "0.9rem",
               color: "#555",
             }}
@@ -193,7 +194,7 @@ export default function PublicMenu() {
             style={{
               height: 1,
               width: "100%",
-              margin: "4px 0 10px",
+              margin: "4px 0 8px",
               background: "rgba(0,0,0,0.08)",
             }}
           />
@@ -202,9 +203,9 @@ export default function PublicMenu() {
           <p
             style={{
               margin: 0,
-              fontSize: "0.95rem",
+              fontSize: "0.92rem",
               fontWeight: 700,
-              letterSpacing: "0.08em", // un poco menos separado
+              letterSpacing: "0.08em",
               color: "#333",
             }}
           >
@@ -215,7 +216,7 @@ export default function PublicMenu() {
             <p
               style={{
                 margin: "2px 0 0 0",
-                fontSize: "0.85rem",
+                fontSize: "0.82rem",
                 color: "#666",
               }}
             >
@@ -239,11 +240,11 @@ export default function PublicMenu() {
 
         {/* CONTENIDO */}
         {!isExpired ? (
-          <main style={{ textAlign: "center", marginBottom: 16 }}>
+          <main style={{ textAlign: "center", marginBottom: 12 }}>
             <h2
               style={{
                 margin: 0,
-                fontSize: "1.3rem",
+                fontSize: "1.25rem",
                 fontWeight: 700,
                 color: "#222",
               }}
@@ -253,8 +254,8 @@ export default function PublicMenu() {
 
             <p
               style={{
-                margin: "4px 0 8px",
-                fontSize: "1.7rem",
+                margin: "4px 0 6px",
+                fontSize: "1.65rem",
                 fontWeight: 800,
                 color: PRICE_COLOR,
               }}
@@ -265,19 +266,19 @@ export default function PublicMenu() {
             <p
               style={{
                 margin: 0,
-                fontSize: "0.98rem",
+                fontSize: "0.96rem",
                 color: "#444",
-                lineHeight: 1.45,
+                lineHeight: 1.4,
               }}
             >
               {special.description}
             </p>
           </main>
         ) : (
-          <main style={{ marginBottom: 16, textAlign: "center" }}>
+          <main style={{ marginBottom: 12, textAlign: "center" }}>
             <p
               style={{
-                fontSize: "0.98rem",
+                fontSize: "0.96rem",
                 color: "#444",
               }}
             >
@@ -291,7 +292,7 @@ export default function PublicMenu() {
         <footer
           style={{
             borderTop: "1px solid #EEE",
-            paddingTop: 14,
+            paddingTop: 10,
             fontSize: "0.9rem",
             color: "#555",
             textAlign: "center",
@@ -308,21 +309,21 @@ export default function PublicMenu() {
             </a>
           </p>
 
-          {/* Bloque de menú con efecto de botón */}
+          {/* Bloque de menú con efecto de botón (abre PDF) */}
           {restaurant.menuUrl && (
-            <div style={{ marginBottom: 10 }}>
-              <p style={{ margin: "4px 0 6px" }}>Mira nuestro menú</p>
+            <div style={{ marginBottom: 8 }}>
+              <p style={{ margin: "2px 0 4px" }}>Mira nuestro menú</p>
               <a
                 href={restaurant.menuUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
                   display: "inline-block",
-                  padding: "8px 20px",
+                  padding: "7px 18px",
                   borderRadius: 999,
                   backgroundColor: LINK_BLUE,
                   color: "#FFFFFF",
-                  fontSize: "0.9rem",
+                  fontSize: "0.88rem",
                   fontWeight: 600,
                   textDecoration: "none",
                   boxShadow: "0 3px 6px rgba(0,0,0,0.2)",
@@ -336,11 +337,11 @@ export default function PublicMenu() {
           {/* Frase legal extra de precio válido */}
           <p
             style={{
-              margin: "6px 0 2px",
-              fontSize: "0.74rem", // un poco más pequeño
+              margin: "4px 0 1px",
+              fontSize: "0.68rem", // más pequeño (~2pt menos)
               color: "#999",
               fontStyle: "italic",
-              lineHeight: 1.35,
+              lineHeight: 1.3,
             }}
           >
             Precio válido mostrando esta pantalla en caja.
@@ -349,10 +350,10 @@ export default function PublicMenu() {
           <p
             style={{
               margin: 0,
-              fontSize: "0.74rem", // letras legales más pequeñas
+              fontSize: "0.68rem", // más pequeño
               color: "#999",
               fontStyle: "italic",
-              lineHeight: 1.35,
+              lineHeight: 1.3,
             }}
           >
             Límite 1 especial por cliente por visita por día. Sujeto a
