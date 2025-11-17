@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 // Colores base (3 colores fuertes)
 const PRIMARY_COLOR = "#FF6A00"; // títulos
 const PRICE_COLOR = "#2E7D32";   // precio
-const BG_YELLOW = "#FFFF00";     // fondo brillante solicitado
+const BG_RED = "#FF0000";        // fondo brillante rojo
 const LINK_BLUE = "#007AFF";     // azul para dirección / teléfono / menú
 
 // Datos de restaurantes demo
@@ -64,7 +64,7 @@ export default function PublicMenu() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          background: BG_YELLOW,
+          background: BG_RED,
           fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
         }}
       >
@@ -118,7 +118,7 @@ export default function PublicMenu() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: BG_YELLOW,
+        background: BG_RED,
         padding: 16,
         fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
       }}
@@ -319,18 +319,29 @@ export default function PublicMenu() {
             </a>
           </p>
 
-          {/* Link al menú (solo si hay menuUrl configurado) */}
+          {/* Bloque de menú con efecto de botón */}
           {restaurant.menuUrl && (
-            <p style={{ margin: "0 0 8px" }}>
+            <div style={{ marginBottom: 10 }}>
+              <p style={{ margin: "4px 0 6px" }}>Mira nuestro menú</p>
               <a
                 href={restaurant.menuUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: LINK_BLUE, textDecoration: "underline" }}
+                style={{
+                  display: "inline-block",
+                  padding: "8px 18px",
+                  borderRadius: 999,
+                  backgroundColor: LINK_BLUE,
+                  color: "#FFFFFF",
+                  fontSize: "0.9rem",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  boxShadow: "0 3px 6px rgba(0,0,0,0.2)",
+                }}
               >
-                Mira nuestro menú (presionando aquí)
+                Presiona aquí
               </a>
-            </p>
+            </div>
           )}
 
           <p
