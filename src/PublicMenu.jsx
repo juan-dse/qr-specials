@@ -20,8 +20,8 @@ const RESTAURANTS = {
       title: "Combo Desayuno Ranchero",
       price: 8.99,
       description:
-        "Huevos al gusto, frijoles, arroz y café de refill. Solo hoy mostrando esta pantalla en caja.",
-      validUntil: "2025-11-29",
+        "Huevos al gusto, frijoles, arroz y café de refill. Solo hoy.",
+      validUntil: "2025-11-28",
     },
   },
 
@@ -119,13 +119,13 @@ export default function PublicMenu() {
         justifyContent: "center",
         alignItems: "center",
         background: BG_RED,
-        padding: 16,
+        padding: 12, // un poco menos rojo lateral
         fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
       }}
     >
       <div
         style={{
-          maxWidth: 480,
+          maxWidth: 460, // tarjeta un poco más angosta
           width: "100%",
           background: "#FFFFFF",
           borderRadius: 24,
@@ -145,7 +145,7 @@ export default function PublicMenu() {
           <h1
             style={{
               margin: 0,
-              fontSize: "1.8rem",
+              fontSize: "1.7rem", // un punto menos grande
               fontWeight: 800,
               color: restaurant.primaryColor || PRIMARY_COLOR,
             }}
@@ -202,9 +202,9 @@ export default function PublicMenu() {
           <p
             style={{
               margin: 0,
-              fontSize: "0.9rem",
+              fontSize: "0.95rem",
               fontWeight: 700,
-              letterSpacing: "0.12em",
+              letterSpacing: "0.08em", // un poco menos separado
               color: "#333",
             }}
           >
@@ -267,7 +267,7 @@ export default function PublicMenu() {
                 margin: 0,
                 fontSize: "0.98rem",
                 color: "#444",
-                lineHeight: 1.4,
+                lineHeight: 1.45,
               }}
             >
               {special.description}
@@ -291,7 +291,7 @@ export default function PublicMenu() {
         <footer
           style={{
             borderTop: "1px solid #EEE",
-            paddingTop: 12,
+            paddingTop: 14,
             fontSize: "0.9rem",
             color: "#555",
             textAlign: "center",
@@ -310,7 +310,7 @@ export default function PublicMenu() {
 
           {/* Bloque de menú con efecto de botón */}
           {restaurant.menuUrl && (
-            <div style={{ marginBottom: 8 }}>
+            <div style={{ marginBottom: 10 }}>
               <p style={{ margin: "4px 0 6px" }}>Mira nuestro menú</p>
               <a
                 href={restaurant.menuUrl}
@@ -318,7 +318,7 @@ export default function PublicMenu() {
                 rel="noopener noreferrer"
                 style={{
                   display: "inline-block",
-                  padding: "8px 18px",
+                  padding: "8px 20px",
                   borderRadius: 999,
                   backgroundColor: LINK_BLUE,
                   color: "#FFFFFF",
@@ -328,7 +328,7 @@ export default function PublicMenu() {
                   boxShadow: "0 3px 6px rgba(0,0,0,0.2)",
                 }}
               >
-                Presiona aquí
+                Ver menú completo
               </a>
             </div>
           )}
@@ -336,10 +336,11 @@ export default function PublicMenu() {
           {/* Frase legal extra de precio válido */}
           <p
             style={{
-              margin: "0 0 2px",
-              fontSize: "0.78rem",
+              margin: "6px 0 2px",
+              fontSize: "0.74rem", // un poco más pequeño
               color: "#999",
               fontStyle: "italic",
+              lineHeight: 1.35,
             }}
           >
             Precio válido mostrando esta pantalla en caja.
@@ -348,9 +349,10 @@ export default function PublicMenu() {
           <p
             style={{
               margin: 0,
-              fontSize: "0.78rem",
+              fontSize: "0.74rem", // letras legales más pequeñas
               color: "#999",
               fontStyle: "italic",
+              lineHeight: 1.35,
             }}
           >
             Límite 1 especial por cliente por visita por día. Sujeto a
