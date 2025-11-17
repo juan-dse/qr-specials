@@ -1,5 +1,5 @@
 // src/PublicMenu.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // Colores base (3 colores fuertes)
@@ -55,6 +55,29 @@ const RESTAURANTS = {
 export default function PublicMenu() {
   const { slug } = useParams();
   const restaurant = RESTAURANTS[slug];
+
+  // Estado para "redimido" en este dispositivo
+  const [redeemed, setRedeemed] = useState(false);
+
+  useEffect(() => {
+    if (!slug) return;
+    const key = `especial_redeemed_${slug}`;
+    const stored = typeof window !== "undefined" ? localStorage.getItem(key) : null;
+    if (stored === "true") {
+      setRedeemed(true);
+    }
+  }, [slug]);
+
+  const handleRedeem = () => {
+    if (!slug) return;
+    const key = `especial_redeemed_${slug}`;
+    try {
+      localStorage.setItem(key, "true");
+    } catch (e) {
+      // si falla localStorage no pasa nada, solo usamos el estado
+    }
+    setRedeemed(true);
+  };
 
   if (!restaurant) {
     return (
@@ -240,49 +263,96 @@ export default function PublicMenu() {
         {/* CONTENIDO */}
         {!isExpired ? (
           <main style={{ textAlign: "center", marginBottom: 16 }}>
-            <h2
-              style={{
-                margin: 0,
-                fontSize: "1.3rem",
-                fontWeight: 700,
-                color: "#222",
-              }}
-            >
-              {special.title}
-            </h2>
+            {!redeemed ? (
+              <>
+                <h2
+                  style={{
+                    margin: 0,
+                    fontSize: "1.3rem",
+                    fontWeight: 700,
+                    color: "#222",
+                  }}
+                >
+                  {special.title}
+                </h2>
 
-            <p
-              style={{
-                margin: "4px 0 8px",
-                fontSize: "1.7rem",
-                fontWeight: 800,
-                color: PRICE_COLOR,
-              }}
-            >
-              ${special.price?.toFixed(2)}
-            </p>
+                <p
+                  style={{
+                    margin: "4px 0 8px",
+                    fontSize: "1.7rem",
+                    fontWeight: 800,
+                    color: PRICE_COLOR,
+                  }}
+                >
+                  ${special.price?.toFixed(2)}
+                </p>
 
-            <p
-              style={{
-                margin: 0,
-                fontSize: "0.98rem",
-                color: "#444",
-                lineHeight: 1.4,
-              }}
-            >
-              {special.description}
-            </p>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "0.98rem",
+                    color: "#444",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {special.description}
+                </p>
 
-            <p
-              style={{
-                marginTop: 8,
-                fontSize: "0.8rem",
-                color: "#777",
-                fontStyle: "italic",
-              }}
-            >
-              Precio válido mostrando esta pantalla en caja.
-            </p>
+                <p
+                  style={{
+                    marginTop: 8,
+                    fontSize: "0.8rem",
+                    color: "#777",
+                    fontStyle: "italic",
+                  }}
+                >
+                  Precio válido mostrando esta pantalla en caja.
+                </p>
+
+                {/* Botón para marcar como redimido */}
+                <button
+                  type="button"
+                  onClick={handleRedeem}
+                  style={{
+                    marginTop: 12,
+                    padding: "8px 16px",
+                    borderRadius: 999,
+                    border: "none",
+                    backgroundColor: "#444",
+                    color: "#FFFFFF",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Marcar como redimido en este dispositivo
+                </button>
+              </>
+            ) : (
+              <>
+                <h2
+                  style={{
+                    margin: 0,
+                    fontSize: "1.3rem",
+                    fontWeight: 700,
+                    color: "#222",
+                  }}
+                >
+                  Especial redimido
+                </h2>
+                <p
+                  style={{
+                    marginTop: 8,
+                    fontSize: "0.98rem",
+                    color: "#555",
+                  }}
+                >
+                  Este especial ya fue marcado como redimido en este dispositivo.
+                  Pide en caja por el <strong>especial del día</strong> o muestra
+                  otra oferta válida.
+                </p>
+              </>
+            )}
           </main>
         ) : (
           <main style={{ marginBottom: 16, textAlign: "center" }}>
@@ -321,7 +391,7 @@ export default function PublicMenu() {
 
           {/* Bloque de menú con efecto de botón */}
           {restaurant.menuUrl && (
-            <div style={{ marginBottom: 10 }}>
+            <div style={{ marginBottom: 8 }}>
               <p style={{ margin: "4px 0 6px" }}>Mira nuestro menú</p>
               <a
                 href={restaurant.menuUrl}
@@ -343,6 +413,18 @@ export default function PublicMenu() {
               </a>
             </div>
           )}
+
+          {/* Frase legal extra de precio válido */}
+          <p
+            style={{
+              margin: "0 0 2px",
+              fontSize: "0.78rem",
+              color: "#999",
+              fontStyle: "italic",
+            }}
+          >
+            Precio válido mostrando esta pantalla en caja.
+          </p>
 
           <p
             style={{
