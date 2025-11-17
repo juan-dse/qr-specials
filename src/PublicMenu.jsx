@@ -118,10 +118,10 @@ export default function PublicMenu() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "flex-start", // cupón más arriba, menos rojo arriba/abajo
+        justifyContent: "center", // centrado vertical como antes
         alignItems: "center",
         background: BG_RED,
-        padding: "6px 8px 4px",
+        padding: "4px 8px",
         fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
       }}
     >
@@ -134,8 +134,6 @@ export default function PublicMenu() {
           padding: 18,
           boxShadow: "0 10px 30px rgba(0,0,0,0.18)",
           border: "1px dashed rgba(0,0,0,0.25)",
-          marginTop: 4,
-          marginBottom: 4,
         }}
       >
         {/* ENCABEZADO CENTRADO */}
@@ -378,14 +376,16 @@ export default function PublicMenu() {
         </footer>
       </div>
 
-      {/* Texto sobre el borde rojo inferior */}
+      {/* Texto sobre el borde rojo inferior, alineado a la derecha */}
       <div
         style={{
-          marginBottom: 4,
-          textAlign: "center",
+          marginTop: 4,
+          width: "100%",
+          maxWidth: 440,
+          textAlign: "right",
           color: "#FFFFFF",
           fontSize: "0.68rem",
-          fontStyle: "italic",
+          fontWeight: 700, // bold
         }}
       >
         powered by especialesqr.com
