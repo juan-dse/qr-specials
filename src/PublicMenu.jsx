@@ -121,8 +121,25 @@ export default function PublicMenu() {
           borderRadius: 24,
           padding: 20,
           boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+          border: "1px dashed rgba(0,0,0,0.18)", // borde tipo cupón
+          position: "relative",                  // para posicionar tijera
         }}
       >
+        {/* Tijera estilo cupón */}
+        <div
+          style={{
+            position: "absolute",
+            top: 6,
+            right: 10,
+            fontSize: "0.9rem",
+            color: "rgba(0,0,0,0.5)",
+            background: "#FFFFFF",
+            padding: "0 4px",
+          }}
+        >
+          ✂️
+        </div>
+
         {/* ENCABEZADO CENTRADO */}
         <header
           style={{
