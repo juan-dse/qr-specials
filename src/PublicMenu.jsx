@@ -2,10 +2,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-// Colores base (solo 3 colores fuertes)
-const PRIMARY_COLOR = "#FF6A00"; // títulos / marca
+// Colores base (3 colores fuertes)
+const PRIMARY_COLOR = "#FF6A00"; // títulos / enlaces
 const PRICE_COLOR = "#2E7D32";   // precio
-const LINK_COLOR = "#007AFF";    // enlaces (dirección, teléfono)
+const BG_YELLOW = "#FFEB3B";     // fondo brillante
 
 // Datos de restaurantes demo
 const RESTAURANTS = {
@@ -18,7 +18,7 @@ const RESTAURANTS = {
       title: "Combo Desayuno Ranchero",
       price: 8.99,
       description:
-        "Huevos al gusto, frijoles, arroz y café de refill. Solo hoy mostrando este código.",
+        "Huevos al gusto, frijoles, arroz y café de refill. Solo hoy mostrando esta pantalla en caja.",
       validUntil: "2025-11-29",
     },
   },
@@ -62,8 +62,8 @@ export default function PublicMenu() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          background: "#F5F5F7",
-          fontFamily: "-apple-system, system-ui, sans-serif",
+          background: BG_YELLOW,
+          fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
         }}
       >
         <div
@@ -74,9 +74,10 @@ export default function PublicMenu() {
             boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
             maxWidth: 400,
             textAlign: "center",
+            border: "1px dashed rgba(0,0,0,0.18)",
           }}
         >
-          <h1 style={{ margin: 0, fontSize: "1.4rem" }}>Código no válido</h1>
+          <h1 style={{ margin: 0, fontSize: "1.4rem" }}>CÓDIGO NO VÁLIDO</h1>
           <p style={{ marginTop: 8, color: "#555" }}>
             El código escaneado no corresponde a un negocio activo en
             EspecialesQR.
@@ -101,6 +102,14 @@ export default function PublicMenu() {
 
   const cleanPhone = restaurant.phone.replace(/[^\d+]/g, "");
 
+  const formattedValidUntil = special.validUntil
+    ? new Date(special.validUntil).toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
+
   return (
     <div
       style={{
@@ -108,9 +117,9 @@ export default function PublicMenu() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#F5F5F7",
+        background: BG_YELLOW,
         padding: 16,
-        fontFamily: "-apple-system, system-ui, sans-serif",
+        fontFamily: "Poppins, -apple-system, system-ui, sans-serif",
       }}
     >
       <div
@@ -120,26 +129,10 @@ export default function PublicMenu() {
           background: "#FFFFFF",
           borderRadius: 24,
           padding: 20,
-          boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-          border: "1px dashed rgba(0,0,0,0.18)", // borde tipo cupón
-          position: "relative",                  // para posicionar tijera
+          boxShadow: "0 10px 30px rgba(0,0,0,0.18)",
+          border: "1px dashed rgba(0,0,0,0.25)", // borde tipo cupón
         }}
       >
-        {/* Tijera estilo cupón */}
-        <div
-          style={{
-            position: "absolute",
-            top: 6,
-            right: 10,
-            fontSize: "0.9rem",
-            color: "rgba(0,0,0,0.5)",
-            background: "#FFFFFF",
-            padding: "0 4px",
-          }}
-        >
-          ✂️
-        </div>
-
         {/* ENCABEZADO CENTRADO */}
         <header
           style={{
@@ -171,7 +164,7 @@ export default function PublicMenu() {
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: LINK_COLOR, textDecoration: "none" }}
+              style={{ color: PRIMARY_COLOR, textDecoration: "none" }}
             >
               {restaurant.address}
             </a>
@@ -188,7 +181,7 @@ export default function PublicMenu() {
             Llámanos:{" "}
             <a
               href={`tel:${cleanPhone}`}
-              style={{ color: LINK_COLOR, textDecoration: "none" }}
+              style={{ color: PRIMARY_COLOR, textDecoration: "none" }}
             >
               {restaurant.phone}
             </a>
@@ -199,36 +192,40 @@ export default function PublicMenu() {
             style={{
               height: 1,
               width: "100%",
-              margin: "4px 0 8px",
-              background: "rgba(0,0,0,0.06)",
+              margin: "4px 0 10px",
+              background: "rgba(0,0,0,0.08)",
             }}
           />
 
-          {/* Vigencia del especial */}
-          {!isExpired && special.validUntil && (
+          {/* NUESTRAS ESPECIALES + fecha */}
+          <p
+            style={{
+              margin: 0,
+              fontSize: "0.9rem",
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+              color: "#333",
+            }}
+          >
+            NUESTRAS ESPECIALES
+          </p>
+
+          {!isExpired && formattedValidUntil && (
             <p
               style={{
                 margin: "2px 0 0 0",
-                fontSize: "0.9rem",
+                fontSize: "0.85rem",
                 color: "#666",
               }}
             >
-              Especial del día • Válido hasta:{" "}
-              <strong>
-                {new Date(special.validUntil).toLocaleDateString("es-MX", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </strong>
+              (Válida hasta {formattedValidUntil})
             </p>
           )}
 
-          {/* Mensaje si está expirada */}
           {isExpired && (
             <p
               style={{
-                marginTop: 8,
+                marginTop: 4,
                 fontSize: "0.9rem",
                 color: "#C62828",
                 fontWeight: 600,
@@ -256,7 +253,7 @@ export default function PublicMenu() {
             <p
               style={{
                 margin: "4px 0 8px",
-                fontSize: "1.6rem",
+                fontSize: "1.7rem",
                 fontWeight: 800,
                 color: PRICE_COLOR,
               }}
@@ -287,7 +284,7 @@ export default function PublicMenu() {
             </p>
           </main>
         ) : (
-          <main style={{ marginBottom: 16 }}>
+          <main style={{ marginBottom: 16, textAlign: "center" }}>
             <p
               style={{
                 fontSize: "0.98rem",
@@ -310,7 +307,7 @@ export default function PublicMenu() {
             textAlign: "center",
           }}
         >
-          <p style={{ margin: 0 }}>{restaurant.address}</p>
+          {/* Dirección eliminada aquí para no repetir */}
           <p style={{ margin: "2px 0 6px" }}>Llámanos: {restaurant.phone}</p>
           <p
             style={{
