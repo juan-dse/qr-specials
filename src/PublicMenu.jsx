@@ -1,210 +1,380 @@
-import React from "react";
+// src/PublicMenu.jsx
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-// 🎯 Catálogo de TUS 3 CLIENTES
+// Colores base (solo 3 colores fuertes)
+const PRIMARY_COLOR = "#FF6A00"; // títulos / marca
+const PRICE_COLOR = "#2E7D32";   // precio
+const LINK_COLOR = "#007AFF";    // enlaces (dirección, teléfono)
+
+// Datos de restaurantes demo
 const RESTAURANTS = {
   "el-perico-market": {
     name: "El Perico Market",
     address: "10524 Garvey Ave, El Monte, CA",
     phone: "626-350-0686",
-    primary_color: "#e65100",
+    primaryColor: PRIMARY_COLOR,
+    logoUrl: "/logos/el-perico-logo.png", // asegúrate de tener este archivo en public/logos/
     special: {
-      name: "Combo Desayuno Ranchero",
+      title: "Combo Desayuno Ranchero",
       price: 8.99,
-      currency: "USD",
       description:
-        "Huevos al gusto, frijoles, arroz y café de refill. Solo hoy mostrando este código."
-    }
+        "Huevos al gusto, frijoles, arroz y café de refill. Solo hoy mostrando este código.",
+      validUntil: "2025-11-30",
+    },
   },
+
   "paloma-meat-market": {
     name: "Paloma Meat Market",
     address: "6531 Rita Ave, Huntington Park, CA 90255",
     phone: "(323) 312-0135",
-    primary_color: "#2e7d32",
+    primaryColor: PRIMARY_COLOR,
+    // logoUrl: "/logos/paloma-logo.png",
     special: {
-      name: "Especial Carne Asada Familiar",
-      price: 16.99,
-      currency: "USD",
-      description:
-        "1 lb de carne asada marinada + tortillas + salsa de la casa. Promoción válida solo en tienda."
-    }
+      title: "Especial Paloma",
+      price: 7.99,
+      description: "Ejemplo de especial para Paloma Meat Market.",
+      validUntil: "2025-11-30",
+    },
   },
+
   "mi-mercadito": {
     name: "Mi Mercadito",
     address: "10500 S Prairie Ave, Inglewood, CA 90303",
     phone: "(310) 419-8127",
-    primary_color: "#0277bd",
+    primaryColor: PRIMARY_COLOR,
+    // logoUrl: "/logos/mi-mercadito-logo.png",
     special: {
-      name: "Paquete Finde: Tacos y Refrescos",
-      price: 12.5,
-      currency: "USD",
-      description:
-        "6 tacos surtidos + 2 refrescos en lata. Disponible presentando esta pantalla en caja."
-    }
-  }
+      title: "Especial Mi Mercadito",
+      price: 6.99,
+      description: "Ejemplo de especial para Mi Mercadito.",
+      validUntil: "2025-11-30",
+    },
+  },
 };
 
-function PublicMenu() {
+export default function PublicMenu() {
   const { slug } = useParams();
-  const config = RESTAURANTS[slug];
+  const restaurant = RESTAURANTS[slug];
 
-  // Si el slug no existe en el catálogo
-  if (!config) {
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  if (!restaurant) {
     return (
-      <BaseLayout>
-        <Card>
-          <h1 style={styles.title}>Código no válido</h1>
-          <p style={styles.specialDescription}>
-            Este código ya no está activo o fue escrito incorrectamente.
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "#F5F5F7",
+          fontFamily: "-apple-system, system-ui, sans-serif",
+        }}
+      >
+        <div
+          style={{
+            padding: 24,
+            borderRadius: 16,
+            background: "#FFFFFF",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+            maxWidth: 400,
+            textAlign: "center",
+          }}
+        >
+          <h1 style={{ margin: 0, fontSize: "1.4rem" }}>Código no válido</h1>
+          <p style={{ marginTop: 8, color: "#555" }}>
+            El código escaneado no corresponde a un negocio activo en
+            EspecialesQR.
           </p>
-          <p style={styles.specialDescription}>
-            Pide en el negocio un QR actualizado o revisa la dirección del
-            enlace.
-          </p>
-        </Card>
-      </BaseLayout>
+        </div>
+      </div>
     );
   }
 
-  const { name, address, phone, primary_color, special } = config;
-  const date = new Date();
-  const primaryColor = primary_color || "#222";
+  const special = restaurant.special || {};
+  let isExpired = false;
+
+  if (special.validUntil) {
+    const validUntilDate = new Date(special.validUntil + "T23:59:59");
+    isExpired = now > validUntilDate;
+  }
+
+  const mapsUrl =
+    restaurant.mapsUrl ||
+    `https://www.google.com/maps?q=${encodeURIComponent(restaurant.address)}`;
+
+  const cleanPhone = restaurant.phone.replace(/[^\d+]/g, "");
 
   return (
-    <BaseLayout>
-      <Card>
-        <header style={styles.header}>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#F5F5F7",
+        padding: 16,
+        fontFamily: "-apple-system, system-ui, sans-serif",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 480,
+          width: "100%",
+          background: "#FFFFFF",
+          borderRadius: 24,
+          padding: 20,
+          boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+          position: "relative",
+        }}
+      >
+        {/* Reloj pequeño arriba a la derecha */}
+        <div
+          style={{
+            position: "absolute",
+            top: 12,
+            right: 16,
+            fontSize: "0.8rem",
+            color: "#666",
+            textAlign: "right",
+          }}
+        >
           <div>
-            <h1 style={{ ...styles.title, color: primaryColor }}>{name}</h1>
-            <p style={styles.subTitle}>
-              Especial Del Día •{" "}
-              {date.toLocaleDateString("es-MX", {
-                weekday: "long",
-                day: "numeric",
-                month: "short"
-              })}
-            </p>
-            <p style={{ ...styles.subTitle, marginTop: 4 }}>
-              Código: {slug}
-            </p>
+            🕒{" "}
+            {now.toLocaleTimeString("es-MX", {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })}
           </div>
-        </header>
+          <div>
+            {now.toLocaleDateString("es-MX", {
+              weekday: "short",
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })}
+          </div>
+        </div>
 
-        <section style={styles.specialSection}>
-          <h2 style={styles.specialTitle}>{special.name}</h2>
+        {/* ENCABEZADO */}
+        <header
+          style={{
+            marginBottom: 16,
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: 12,
+          }}
+        >
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <h1
+              style={{
+                margin: 0,
+                fontSize: "1.8rem",
+                fontWeight: 800,
+                color: restaurant.primaryColor || PRIMARY_COLOR,
+              }}
+            >
+              {restaurant.name}
+            </h1>
 
-          <p style={styles.specialPrice}>
-            {special.currency === "USD" ? "$" : ""}
-            {special.price.toFixed(2)}
-          </p>
+            <p
+              style={{
+                margin: "4px 0 0 0",
+                fontSize: "0.9rem",
+                color: "#555",
+              }}
+            >
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: LINK_COLOR, textDecoration: "none" }}
+              >
+                {restaurant.address}
+              </a>
+            </p>
 
-          <p style={styles.specialDescription}>{special.description}</p>
+            <p
+              style={{
+                margin: "2px 0 8px 0",
+                fontSize: "0.9rem",
+                color: "#555",
+              }}
+            >
+              Tel:{" "}
+              <a
+                href={`tel:${cleanPhone}`}
+                style={{ color: LINK_COLOR, textDecoration: "none" }}
+              >
+                {restaurant.phone}
+              </a>
+            </p>
 
-          <div style={styles.infoBox}>
-            {address && <p style={styles.infoLine}>{address}</p>}
-            {phone && (
-              <p style={styles.infoLine}>
-                Tel:{" "}
-                <a href={`tel:${phone}`} style={styles.link}>
-                  {phone}
-                </a>
+            {!isExpired && special.validUntil && (
+              <p
+                style={{
+                  margin: "2px 0 0 0",
+                  fontSize: "0.9rem",
+                  color: "#666",
+                }}
+              >
+                Especial del día • Válido hasta:{" "}
+                <strong>
+                  {new Date(special.validUntil).toLocaleDateString("es-MX", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </strong>
+              </p>
+            )}
+
+            <p
+              style={{
+                margin: "2px 0 0 0",
+                fontSize: "0.85rem",
+                color: "#777",
+              }}
+            >
+              Código de promoción: <strong>El-Perico-Market</strong>
+            </p>
+
+            {isExpired && (
+              <p
+                style={{
+                  marginTop: 8,
+                  fontSize: "0.9rem",
+                  color: "#C62828",
+                  fontWeight: 600,
+                }}
+              >
+                Promoción expirada
               </p>
             )}
           </div>
 
-          <p style={styles.footerNote}>
-            Muestra esta pantalla en caja para recibir la promoción.
+          {restaurant.logoUrl && (
+            <div
+              style={{
+                flexShrink: 0,
+                width: 40,
+                height: 40,
+                borderRadius: 10,
+                overflow: "hidden",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "#F1F1F5",
+              }}
+            >
+              <img
+                src={restaurant.logoUrl}
+                alt={`Logo de ${restaurant.name}`}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  display: "block",
+                }}
+              />
+            </div>
+          )}
+        </header>
+
+        {/* CONTENIDO */}
+        {!isExpired ? (
+          <main style={{ textAlign: "center", marginBottom: 16 }}>
+            <h2
+              style={{
+                margin: 0,
+                fontSize: "1.3rem",
+                fontWeight: 700,
+                color: "#222",
+              }}
+            >
+              {special.title}
+            </h2>
+
+            <p
+              style={{
+                margin: "4px 0 8px",
+                fontSize: "1.6rem",
+                fontWeight: 800,
+                color: PRICE_COLOR,
+              }}
+            >
+              ${special.price?.toFixed(2)}
+            </p>
+
+            <p
+              style={{
+                margin: 0,
+                fontSize: "0.98rem",
+                color: "#444",
+                lineHeight: 1.4,
+              }}
+            >
+              {special.description}
+            </p>
+
+            <p
+              style={{
+                marginTop: 8,
+                fontSize: "0.8rem",
+                color: "#777",
+                fontStyle: "italic",
+              }}
+            >
+              Precio válido mostrando esta pantalla en caja.
+            </p>
+          </main>
+        ) : (
+          <main style={{ marginBottom: 16 }}>
+            <p
+              style={{
+                fontSize: "0.98rem",
+                color: "#444",
+              }}
+            >
+              Esta promoción ya no está vigente. Pregunta en caja por el{" "}
+              <strong>especial del día</strong>.
+            </p>
+          </main>
+        )}
+
+        {/* FOOTER */}
+        <footer
+          style={{
+            borderTop: "1px solid #EEE",
+            paddingTop: 12,
+            fontSize: "0.9rem",
+            color: "#555",
+          }}
+        >
+          <p style={{ margin: 0 }}>{restaurant.address}</p>
+          <p style={{ margin: "2px 0 6px" }}>Tel: {restaurant.phone}</p>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "0.78rem",
+              color: "#999",
+              fontStyle: "italic",
+            }}
+          >
+            Límite 1 especial por cliente por visita por día. Sujeto a
+            disponibilidad y a cambios sin previo aviso. Impuestos adicionales
+            donde apliquen. No válido con otras promociones ni descuentos. No se
+            ofrecen rain checks.
           </p>
-        </section>
-      </Card>
-    </BaseLayout>
+        </footer>
+      </div>
+    </div>
   );
 }
-
-function BaseLayout({ children }) {
-  return <div style={styles.page}>{children}</div>;
-}
-
-function Card({ children }) {
-  return <div style={styles.card}>{children}</div>;
-}
-
-const styles = {
-  page: {
-    minHeight: "100vh",
-    backgroundColor: "#f5f5f5",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "16px",
-    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
-  },
-  card: {
-    width: "100%",
-    maxWidth: "480px",
-    backgroundColor: "#ffffff",
-    borderRadius: "16px",
-    padding: "20px",
-    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)"
-  },
-  header: {
-    display: "flex",
-    alignItems: "center",
-    gap: "16px",
-    marginBottom: "20px"
-  },
-  title: {
-    fontSize: "20px",
-    margin: 0,
-    fontWeight: "700"
-  },
-  subTitle: {
-    fontSize: "13px",
-    margin: "4px 0 0",
-    color: "#777",
-    textTransform: "capitalize"
-  },
-  specialSection: {
-    textAlign: "center"
-  },
-  specialTitle: {
-    fontSize: "22px",
-    margin: "4px 0",
-    fontWeight: "700"
-  },
-  specialPrice: {
-    fontSize: "20px",
-    margin: "4px 0 8px",
-    fontWeight: "700",
-    color: "#4caf50"
-  },
-  specialDescription: {
-    fontSize: "15px",
-    margin: "8px 0 16px",
-    color: "#555",
-    lineHeight: 1.4
-  },
-  infoBox: {
-    marginTop: "8px",
-    padding: "10px 12px",
-    borderRadius: "12px",
-    backgroundColor: "#fafafa",
-    textAlign: "left"
-  },
-  infoLine: {
-    margin: "2px 0",
-    fontSize: "14px",
-    color: "#555"
-  },
-  link: {
-    color: "#1976d2",
-    textDecoration: "none"
-  },
-  footerNote: {
-    marginTop: "14px",
-    fontSize: "13px",
-    color: "#888"
-  }
-};
-
-export default PublicMenu;
